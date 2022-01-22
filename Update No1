@@ -1,1 +1,58 @@
-https://www.overleaf.com/project/61eb8f88d5f5fb9ee351512b
+https://www.overleaf.com/project/61eb8f88d5f5fb9ee351512b       Link of term paper
+
+
+Code of latex:---------------------------------------------------------------------------
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amscd, amsthm, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\oddsidemargin 0pt
+\evensidemargin 0pt
+\marginparwidth 40pt
+\marginparsep 10pt
+\topmargin -20pt
+\headsep 10pt
+\textheight 8.7in
+\textwidth 6.5in
+\linespread{1.2}
+\title{A Database Interface for Clustering in Large Spatial Databases}
+\author{Nitish Raj \and Prof: Dr. Saurabh Gupta}
+\date{\today}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newcommand{\rr}{\mathbb{R}}
+
+\newcommand{\al}{\alpha}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\aff}{aff}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+    Both the number and the size of spatial databases are rapidly
+growing because of the large amount of data obtained from
+satellite images, X-ray crystallography or other scientific
+equipment. Therefore, automated knowledge discovery becomes more and more important in spatial databases. So far,
+most of the methods for knowledge discovery in databases
+(KDD) have been based on relational database systems. In
+this paper, we address the task of class identification in spatial
+databases using clustering techniques. We present an interface
+to the database management system (DBMS), which is crucial
+for the efficiency of KDD on large databases. This interface
+is based on a spatial access method, the R*-tree. It clusters the
+objects according to their spatial neighborhood and supports
+efficient processing of spatial queries. Furthermore, we propose a method for spatial data sampling as part of the focusing
+component, significantly reducing the number of objects to be
+clustered. Thus, we achieve a considerable speed-up for clustering in large databases. We have applied the proposed techniques to real data from a large protein database used for
+predicting protein-protein docking. A performance evaluation
+on this database indicates that clustering on large spatial databases can be performed both efficiently and effectively using
+our approach.
+\end{abstract}
+
+\end{document}
+
