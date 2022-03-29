@@ -1,0 +1,107 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amscd, amsthm, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\oddsidemargin 0pt
+\evensidemargin 0pt
+\marginparwidth 40pt
+\marginparsep 10pt
+\topmargin -20pt
+\headsep 10pt
+\textheight 8.7in
+\textwidth 6.5in
+\linespread{1.2}
+\title{A Database Interface for Clustering in Large Spatial Databases}
+\author{Nitish Raj \and Prof: Dr. Saurabh Gupta}
+\date{\today}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newcommand{\rr}{\mathbb{R}}
+
+\newcommand{\al}{\alpha}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\aff}{aff}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+    Both the number and the size of spatial databases are rapidly
+growing because of the large amount of data obtained from
+satellite images, X-ray crystallography or other scientific
+equipment. Therefore, automated knowledge discovery becomes more and more important in spatial databases. So far,
+most of the methods for knowledge discovery in databases
+(KDD) have been based on relational database systems. In
+this paper, we address the task of class identification in spatial
+databases using clustering techniques. We present an interface
+to the database management system (DBMS), which is crucial
+for the efficiency of KDD on large databases. This interface
+is based on a spatial access method, the R*-tree. It clusters the
+objects according to their spatial neighborhood and supports
+efficient processing of spatial queries. Furthermore, we propose a method for spatial data sampling as part of the focusing
+component, significantly reducing the number of objects to be
+clustered. Thus, we achieve a considerable speed-up for clustering in large databases. We have applied the proposed techniques to real data from a large protein database used for
+predicting protein-protein docking. A performance evaluation
+on this database indicates that clustering on large spatial databases can be performed both efficiently and effectively using
+our approach.
+\end{abstract}
+\section{Introduction }
+Numerous applications require the management of geometric, geographic or spatial data, i.e. data related to space. The
+relevant space may be, e. g., a two-dimensional projection of
+the surface of the earth in the case of a geographic information system or a 3d-space containing a protein molecule in
+the case of an application in molecular biology. Spatial Database Systems (SDBS) (Gueting 1994) are database systems
+with additional support for the management of spatial data:
+they offer spatial data types in their data model and provide
+spatial access methods for efficient implementations of spatial operations (cf. Brinkhoff et al. 1993, Brinkhoff et al.
+1994). Typical objects are points, lines, polygons and
+spheres with non-spatial attributes like landuse, color or
+electrostatic charge. While non-spatial attributes usually
+have atomar values, the values of spatial attributes often
+have an extension in space.
+Both the number and the size of spatial databases are rapidly growing because of the large amount of data obtained
+from satellite images, X-ray crystallography or other scientific equipment. This growth by far exceeds human capacities to analyze the databases in order to find implicit regularities, rules or clusters hidden in the data. Therefore,
+automated knowledge discovery becomes more and more
+important in spatial databases. Knowledge discovery in databases (KDD) is the non-trivial extraction of implicit, previously unknown, and potentially useful information from
+databases (Frawley, Piatetsky-Shapiro & Matheus 1991). So
+far, most of the KDD methods have been based on relational
+database systems which are appropriate to handle non-spatial data, but not spatial data.
+One of the well-known techniques for KDD is induction.
+Han, Cai, & Cercone (1993) assume the existence of concept
+hierarchies in the application domain and uses them to generalize the tuples of a relation into characteristic rules and
+classification rules. Liu, Han, & Ooi (1993) extend this
+method for SDBS by adding spatial concept hierarchies and
+performing spatial induction. However, these hierarchies
+may not be available in many applications and, if available,
+they will not be appropriate for all KDD tasks. Therefore,
+Ng & Han (1994) do not rely on any domain knowledge and
+explores the applicability of cluster analysis techniques for
+KDD in SDBS. An algorithm called CLARANS (Clustering
+Large Applications based on RANdomized Search) is presented, which is both, efficient and effective for databases of
+some thousand objects.
+Ng & Han (1994) assume that all objects to be clustered
+can reside in main memory at the same time. However, this
+does not hold for large databases. Furthermore, the runtime
+of CLARANS is prohibitive on large databases. In general,
+the issue of interfacing KDD systems with a database management system (DBMS) has received little attention in the
+KDD literature and many systems are not yet integrated with
+a DBMS. Matheus, Chan, & Piatetsky-Shapiro (1993) propose an architecture of a KDD system including a DBMS interface and a focusing component. Well-known techniques
+are, e.g. focusing on a small subset of all tuples or focusing
+on a subset of all attributes. Agrawal, Imielinski, & Swami
+(1993) present a set of basic operations for solving different KDD tasks and shows how to apply them for efficient classification, i.e. finding rules that partition the database into a
+given set of groups. Good performance even on a large database is obtained by splitting the search space into independent parts, which is possible because different branches of a
+decision tree may be expanded independently from each
+other. Holsheimer & Kersten (1994) address the issue of
+classification in large relational databases. Splitting the given relation into a lot of relatively small binary relations, i.e.
+focusing on one attribute at a time, Holsheimer & Kersten
+(1994) always keep the relevant part of the database in main
+memory.
+\section{CLARANS on Large Databases}
+Clustering techniques are attractive for KDD, because they
+can find hidden structures in data without using any additional domain knowledge. We have choosen the k-medoid
+method as the basis of our clustering algorithm.
+
+\end{document}
