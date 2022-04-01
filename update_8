@@ -1,0 +1,179 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amscd, amsthm, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\oddsidemargin 0pt
+\evensidemargin 0pt
+\marginparwidth 40pt
+\marginparsep 10pt
+\topmargin -20pt
+\headsep 10pt
+\textheight 8.7in
+\textwidth 6.5in
+\linespread{1.2}
+\title{A Database Interface for Clustering in Large Spatial Databases}
+\author{Nitish Raj \and Prof: Dr. Saurabh Gupta}
+\date{\today}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newcommand{\rr}{\mathbb{R}}
+
+\newcommand{\al}{\alpha}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\aff}{aff}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+    Both the number and the size of spatial databases are rapidly
+growing because of the large amount of data obtained from
+satellite images, X-ray crystallography or other scientific
+equipment. Therefore, automated knowledge discovery becomes more and more important in spatial databases. So far,
+most of the methods for knowledge discovery in databases
+(KDD) have been based on relational database systems. In
+this paper, we address the task of class identification in spatial
+databases using clustering techniques. We present an interface
+to the database management system (DBMS), which is crucial
+for the efficiency of KDD on large databases. This interface
+is based on a spatial access method, the R*-tree. It clusters the
+objects according to their spatial neighborhood and supports
+efficient processing of spatial queries. Furthermore, we propose a method for spatial data sampling as part of the focusing
+component, significantly reducing the number of objects to be
+clustered. Thus, we achieve a considerable speed-up for clustering in large databases. We have applied the proposed techniques to real data from a large protein database used for
+predicting protein-protein docking. A performance evaluation
+on this database indicates that clustering on large spatial databases can be performed both efficiently and effectively using
+our approach.
+\end{abstract}
+\section{Introduction }
+Numerous applications require the management of geometric, geographic or spatial data, i.e. data related to space. The
+relevant space may be, e. g., a two-dimensional projection of
+the surface of the earth in the case of a geographic information system or a 3d-space containing a protein molecule in
+the case of an application in molecular biology. Spatial Database Systems (SDBS) (Gueting 1994) are database systems
+with additional support for the management of spatial data:
+they offer spatial data types in their data model and provide
+spatial access methods for efficient implementations of spatial operations (cf. Brinkhoff et al. 1993, Brinkhoff et al.
+1994). Typical objects are points, lines, polygons and
+spheres with non-spatial attributes like landuse, color or
+electrostatic charge. While non-spatial attributes usually
+have atomar values, the values of spatial attributes often
+have an extension in space.
+Both the number and the size of spatial databases are rapidly growing because of the large amount of data obtained
+from satellite images, X-ray crystallography or other scientific equipment. This growth by far exceeds human capacities to analyze the databases in order to find implicit regularities, rules or clusters hidden in the data. Therefore,
+automated knowledge discovery becomes more and more
+important in spatial databases. Knowledge discovery in databases (KDD) is the non-trivial extraction of implicit, previously unknown, and potentially useful information from
+databases (Frawley, Piatetsky-Shapiro & Matheus 1991). So
+far, most of the KDD methods have been based on relational
+database systems which are appropriate to handle non-spatial data, but not spatial data.
+One of the well-known techniques for KDD is induction.
+Han, Cai, & Cercone (1993) assume the existence of concept
+hierarchies in the application domain and uses them to generalize the tuples of a relation into characteristic rules and
+classification rules. Liu, Han, & Ooi (1993) extend this
+method for SDBS by adding spatial concept hierarchies and
+performing spatial induction. However, these hierarchies
+may not be available in many applications and, if available,
+they will not be appropriate for all KDD tasks. Therefore,
+Ng & Han (1994) do not rely on any domain knowledge and
+explores the applicability of cluster analysis techniques for
+KDD in SDBS. An algorithm called CLARANS (Clustering
+Large Applications based on RANdomized Search) is presented, which is both, efficient and effective for databases of
+some thousand objects.
+Ng & Han (1994) assume that all objects to be clustered
+can reside in main memory at the same time. However, this
+does not hold for large databases. Furthermore, the runtime
+of CLARANS is prohibitive on large databases. In general,
+the issue of interfacing KDD systems with a database management system (DBMS) has received little attention in the
+KDD literature and many systems are not yet integrated with
+a DBMS. Matheus, Chan, & Piatetsky-Shapiro (1993) propose an architecture of a KDD system including a DBMS interface and a focusing component. Well-known techniques
+are, e.g. focusing on a small subset of all tuples or focusing
+on a subset of all attributes. Agrawal, Imielinski, & Swami
+(1993) present a set of basic operations for solving different KDD tasks and shows how to apply them for efficient classification, i.e. finding rules that partition the database into a
+given set of groups. Good performance even on a large database is obtained by splitting the search space into independent parts, which is possible because different branches of a
+decision tree may be expanded independently from each
+other. Holsheimer & Kersten (1994) address the issue of
+classification in large relational databases. Splitting the given relation into a lot of relatively small binary relations, i.e.
+focusing on one attribute at a time, Holsheimer & Kersten
+(1994) always keep the relevant part of the database in main
+memory.
+\section{CLARANS on Large Databases}
+Clustering techniques are attractive for KDD, because they
+can find hidden structures in data without using any additional domain knowledge. We have choosen the k-medoid
+method as the basis of our clustering algorithm.
+In comparison with k-mean methods, e.g. ISODATA, k-medoid clustering algorithms have the following advantages. First, the
+method can be used not only on points or vectors for which
+the mean is defined but also on any objects for which a similarity measure between two objects is given. Second, the kmedoid methods are robust to the existence of outliers (i.e.
+objects that are very far away from the rest of the objects).
+Last but not least, k-medoid based algorithms can handle
+very large data sets quite efficiently. See (Kaufman & Rousseeuw 1990) for a more detailed comparison of k-medoid
+methods with other clustering methods.
+In this paper, we consider the following clustering problem. Given the number of clusters k, a set O of n objects, and
+a distance function, dist: O x O → R0
+, find a subset M ⊆ O of
+k representative objects, i.e. the set of medoids, such that the
+average distance of all objects to their medoids is minimized. Each object o ∈ O is assigned to the closest m ∈ M.
+In the following, we assume dist to be the euclidean distance, which is a natural choice for spatial clustering. We define a function medoid:
+$$medoid: O → M
+medoid(o) = mi
+, mi ∈M, ∀ mj ∈M: dist(o,mi
+) ≤ dist(o,mj
+)$$
+sumptions. Let c be the average number of objects stored on
+one page. The small set of medoids is resident in main memory, while the large set of non medoids has to reside on disk.
+The I/O-cost heavily dominates the CPU cost. Therefore, we
+take the number of disk pages to be read as the cost measure,
+which is a common approach for database systems.
+We obtain the following cost for the different operations.
+The procedure $$❷$$ (see figure 1) has to read just one of the
+non medoid objects, i.e. one page. For similar reasons procedure ❶ will have to read k pages in the worst case. Procedure ❸ accesses all objects, which means it reads n/c pages.
+Procedure $$❹$$ only changes the set of medoids and thus does
+not access to the disk. Procedure$$ ➎ $$again has to access all
+objects, i.e. has cost n/c.
+Our analysis indicates that the most expensive operation
+of CLARANS is the calculation of the difference of distance
+(procedure ❸). Its cost is O(n), i.e. it needs to read all data
+pages each time. Furthermore, it is called very frequently,
+depending on n, k and on the distribution of the database objects in space. In chapter 4, we will present focusing techniques addressing the improvement of efficiency for CLARANS.
+\section{The DBMS Interface}
+The DB interface allows the KDD system to access the database using queries. A simple query for a relational DBMS,
+e.g., could request some of the attributes of all tuples in a relation with a given attribute value. Typical queries for SDBS
+are region queries (return all objects from the database intersecting a query polygon) and nearest neighbor queries (return the object closest to a query object) (Gueting 1994).
+Spatial access methods (SAM) have been developed to
+support efficient processing of such queries. They organize
+both the relevant space and the objects of the database such
+that only a minimal subset of the database has to be considered to find the answers of a query. An approximation is a
+simple object with limited complexity preserving the main
+properties of a complex spatial object. The use of approximations leads to a two step strategy of query processing.
+First, the filtering step excludes as many objects as possible
+from the set of answers based on the approximations and returns a set of candidates. Second, the refinement step checks
+the exact geometry of the candidates in order to decide
+whether they fulfill the query condition or not.
+The most common approximation is the bounding box
+(BB), i.e. the minimal rectilinear rectangle containing a given spatial object. Therefore, most SAM’s are designed to
+manage rectangles (c.f. Gueting 1994 for an overview of
+SAM’s). The R*-tree (Beckmann et al. 1990) is a SAM
+which is very efficient both for points and rectangles. It is a
+balanced search tree, similar to the B+
+-tree, storing in each
+node a set of rectangles. Each node of the tree represents a
+page, the unit of secondary storage. Therefore, the number
+of rectangles per node is constrained by a lower limit (min)
+and an upper limit (max) with the goal to obtain a high storage utilization and to keep the number of disk pages to be
+read for query processing as small as possible. The nodes
+storing the data objects are called data pages, the nodes or from the n objects of the database and applies PAM to the
+representatives only. The method for sampling is as follows:
+Assign each object to a unique index in the range [1..n].
+Draw 40+2k random numbers from the interval [1..n] and return the objects with the respective indices as representatives.
+Step (1) is the crucial one. In order to obtain representatives with a good distribution over the geometric space, the
+indices have to be assigned such that objects with similar indices are close to each other in the geometric space. In other
+words, we need a method for defining a linear order for objects reflecting their geometric neighborhood as much as
+possible. Kaufman & Rousseeuw (1990) give no hint how to
+obtain such an order. The R*-tree, however, offers a solution
+to this problem. In fact, the R*-tree has been designed to store
+a SDB such that neighboring objects, which are often requested by the same query, are stored in neighboring pages
+on the disk
+
+\end{document}
